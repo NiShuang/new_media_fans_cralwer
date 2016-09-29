@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import urllib2
 import re
+import json
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,6 +25,15 @@ def get_by_request():
     print fans
     return fans
 
+def get_by_api():
+    url = 'https://openapi.youku.com/v2/users/friendship/followers.json?client_id=b10ab8588528b1b1&user_id=UMjk1ODg3NDgwOA=='
+    request = urllib2.Request(url = url)
+    response = urllib2.urlopen(request)
+    page = response.read()
+    result = json.loads(page, encoding="utf-8")
+    fans = int(result['total'])
+    print fans
+    return fans
 
 def get_by_selenium():
     url = 'http://i.youku.com/i/UMjk1ODg3NDgwOA=='
@@ -49,5 +59,5 @@ def get_by_selenium():
     return fans
 
 if __name__ == "__main__":
-    get_by_request()
+    get_by_api()
     # get_by_selenium()

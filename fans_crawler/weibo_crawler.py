@@ -35,7 +35,7 @@ def get_by_selenium():
     cap["phantomjs.page.settings.localToRemoteUrlAccessEnabled"] = True
     cap["userAgent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0"
     cap["XSSAuditingEnabled"] = True
-    cap["host"] = 'weibo.com'
+    cap["host"] = 'weibo.cn'
     cap["cookie"] = 'UOR=www.umeng.com,widget.weibo.com,www.insta360.com; SINAGLOBAL=6982249232630.452.1472299450582; ULV=1475028466086:3:2:2:8231266012653.427.1475028466020:1474966940284; SUB=_2AkMgtrrUf8NhqwJRmP0czWrmZY53wgjEieLBAH7sJRMxHRl-yT83qm8AtRCo0NEVwCee4iQkVabYZqZ8gEhMng..; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WWT6ckK7WZ-8GkEahm6SKw1; TC-Page-G0=0cd4658437f38175b9211f1336161d7d; _s_tentry=-; Apache=8231266012653.427.1475028466020'
     driver = webdriver.PhantomJS(desired_capabilities=cap,
                                       service_args=['--ignore-ssl-errors=true', '--ssl-protocol=any',
