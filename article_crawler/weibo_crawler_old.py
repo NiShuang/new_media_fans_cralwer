@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import urllib
 import urllib2
+import datetime
 import time
 import json
 import requests
@@ -38,43 +39,45 @@ from selenium.webdriver.support.ui import WebDriverWait
 #     return access_token
 
 def get_by_api():
-    result = []
     url = 'https://api.weibo.com/2/statuses/user_timeline.json?page=1'
-    username = '15850786305'
-    password = '11223344'
+    username = 'newmedia@vzhibo.tv'
+    password = 'lanfeng123'
     value = {}
     value['trim_user'] = '1'
     value['count'] = '100'
-    value['source'] = '2397089507'
+    value['source'] = '218121934'
     data = urllib.urlencode(value)
     base64string = base64.encodestring(
         '%s:%s' % (username, password))[:-1]  # 注意哦，这里最后会自动添加一个\n
     authheader = "Basic %s" % base64string
     header = {}
     header['Authorization'] = authheader
+    now = time.mktime(datetime.date.today().timetuple())
+    week_ago = now - (3600 * 24 * 7)
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    share_total = 0
+    like_total = 0
+    comment_total = 0
     results = requests.get(url=url, params=data, headers=header)
     page = results.content
-    # print page
+    print page
     jsonData = json.loads(page, encoding="utf-8")
     data = jsonData['statuses']
     for item in data:
         temp = time.mktime(time.strptime(item['created_at'], "%a %b %d %H:%M:%S +0800 %Y"))
-        time_struct = time.localtime(temp)
-        datetime = time.strftime("%Y-%m-%d %H:%M:%S", time_struct)
-        date = time.strftime("%Y-%m-%d %H:%M:%S", time_struct)
-        temp = {
-            'account': username,
-            'message': item['text'],
-            'id': item['idstr'],
-            'public_time': datetime,
-            'date': date,
-            'share': item['reposts_count'],
-            'comment': item['comments_count'],
-            'like': item['attitudes_count']
-            # 'link': item['entities']['media']['expanded_url'],
-        }
-        # print temp
-        result.append(temp)
+        if temp >= week_ago:
+            share_total += int(item['reposts_count'])
+            like_total += int(item['attitudes_count'])
+            comment_total += int(item['comments_count'])
+    result = {
+        'platform': 'weibo',
+        'date': today,
+        'comment': comment_total,
+        'like': like_total,
+        'share': share_total,
+        'dislike': 0,
+        'view': 0
+    }
     jsonResult = json.dumps(result)
     print  jsonResult
     return jsonResult

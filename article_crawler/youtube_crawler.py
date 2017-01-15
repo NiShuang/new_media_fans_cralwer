@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 import urllib2
-import urllib
+import time
 import json
+import datetime
 import requests
 
 
@@ -14,13 +15,18 @@ class YoukuCrawler:
         self.list_api = 'https://www.googleapis.com/youtube/v3/playlistItems?maxResults=' + str(self.maxResults) + '&part=snippet&playlistId=' + playlist_id + '&key=' + self.app_key
         # self.info_api = 'https://www.googleapis.com/youtube/v3/videos?maxResults=50&part=snippet,statistics' + '&key=' + self.app_key
         self.info_api = 'https://www.googleapis.com/youtube/v3/videos'
+        now = time.mktime(datetime.date.today().timetuple())
+        self.week_ago = now - (3600 * 24 * 7)
+        self.view_total = 0
+        self.like_total = 0
+        self.dislike_total = 0
+        self.comment_total = 0
     def main(self):
         self.get_video_ids()
         return self.get_videos_info()
 
     def get_video_ids(self):
         url = self.list_api
-        # print url
         request = urllib2.Request(url=url)
         response = urllib2.urlopen(request)
         page = response.read()
@@ -42,11 +48,8 @@ class YoukuCrawler:
             for video in videos:
                 self.video_ids.append(video['snippet']['resourceId']['videoId'])
 
-        # print len(self.video_ids)
-
 
     def get_videos_info(self):
-        result = []
         url = self.info_api
         query = ''
         count = 0
@@ -58,38 +61,36 @@ class YoukuCrawler:
                 results = requests.get(url,
                                params={'id': query, 'maxResults': self.maxResults, 'part': 'snippet,statistics', 'key': self.app_key})
                 page = results.content
-                # print results.url
-                # print page
                 videos = json.loads(page, encoding="utf-8")['items']
                 for video in videos:
                     try:
-                        like_count = video['statistics']['likeCount']
+                        like_count = int(video['statistics']['likeCount'])
                     except KeyError:
                         like_count = 0
                     try:
-                        dislike_count = video['statistics']['dislikeCount']
+                        dislike_count = int(video['statistics']['dislikeCount'])
                     except KeyError:
                         dislike_count = 0
-                    temp = {
-                        'account': video['snippet']['channelTitle'],
-                        'title': video['snippet']['title'],
-                        'id': video['id'],
-                        'public_time': video['snippet']['publishedAt'],
-                        'date': video['snippet']['publishedAt'][:10],
-                        'view': video['statistics']['viewCount'],
-                        'like': like_count,
-                        'dislike': dislike_count,
-                        'favorite': video['statistics']['favoriteCount'],
-                        'comment': video['statistics']['commentCount'],
-                        'link': 'https://www.youtube.com/watch?v=' + video['id'],
-                    }
-                    result.append(temp)
+                    temp = time.mktime(time.strptime(video['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%S.000Z"))
+                    if temp >= self.week_ago:
+                        self.dislike_total += dislike_count
+                        self.like_total += like_count
+                        self.comment_total += int(video['statistics']['commentCount'])
+                        self.view_total += int(video['statistics']['viewCount'])
                     query = ''
-        # print len(result)
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        result = {
+            'platform': 'youtube',
+            'date': today,
+            'comment': self.comment_total,
+            'like': self.like_total,
+            'share': 0,
+            'dislike': self.dislike_total,
+            'view': self.view_total
+        }
         jsonResult = json.dumps(result)
         print  jsonResult
         return jsonResult
-
 
 if __name__ == "__main__":
     c = YoukuCrawler()

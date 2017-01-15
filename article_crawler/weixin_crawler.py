@@ -2,6 +2,8 @@
 import urllib2
 import urllib
 import json
+import time
+import datetime
 
 
 def get_by_request():
@@ -14,10 +16,9 @@ def get_by_request():
     headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0'
     headers['X-Requested-With'] = 'XMLHttpRequest'
     headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
-    # headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-    # headers['Connection'] = 'keep-alive'
 
     value = {}
+    value['flag'] = 'true'
     value['uuid'] = '91B514A33A4D2FA4C1E923ABDA595A90'
     value['nonce'] = '3679c0e73'
     value['xyz'] = '6cdb1d7fbdeea8afe76a21479f46f0b2'
@@ -25,22 +26,27 @@ def get_by_request():
     request = urllib2.Request(url = url,data = data, headers = headers)
     response = urllib2.urlopen(request)
     page = response.read()
-    # print page
+    now = time.mktime(datetime.date.today().timetuple())
+    week_ago = now - (3600 * 24 * 7)
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    like_total = 0
+    view_total = 0
     result = json.loads(page, encoding="utf-8")
     articles = result['value']['lastestArticle']
-    result = []
     for article in articles:
-        temp = {
-            'account': article['account'],
-            'title': article['title'],
-            'id': article['messageId'],
-            'public_time': article['publicTime'],
-            'date': article['publicTime'][:10],
-            'view': article['clicksCount'],
-            'like': article['likeCount'],
-            'link': article['url'],
-        }
-        result.append(temp)
+        temp = time.mktime(time.strptime(article['publicTime'], "%Y-%m-%d %H:%M:%S"))
+        if temp >= week_ago:
+            view_total += int(article['clicksCount'])
+            like_total += int(article['likeCount'])
+    result = {
+        'platform': 'weixin',
+        'date': today,
+        'comment': 0,
+        'like': like_total,
+        'share': 0,
+        'dislike': 0,
+        'view': view_total
+    }
     jsonResult = json.dumps(result)
     print  jsonResult
     return jsonResult

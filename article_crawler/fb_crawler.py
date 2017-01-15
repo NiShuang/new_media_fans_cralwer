@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 import urllib2
 import json
+import time
+import datetime
 
 
 def get_by_api():
-    result = []
     app_id = '1598022290502419'
     app_secret = 'f0fc5a210b5531987cbc671a6c3d864f'
     access_token = app_id + '|' + app_secret
@@ -15,36 +16,38 @@ def get_by_api():
     headers['Connection'] = 'keep-alive'
     headers['Upgrade-Insecure-Requests'] = '1'
     headers['Cache-Control'] = 'max-age=0'
-
+    now = time.mktime(datetime.date.today().timetuple())
+    week_ago = now - (3600 * 24 * 7)
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    share_total = 0
+    like_total = 0
+    comment_total = 0
     while True:
         request = urllib2.Request(url = url, headers = headers)
         response = urllib2.urlopen(request)
         page = response.read()
-        # print page
         jsonData = json.loads(page, encoding="utf-8")
         data = jsonData['data']
         for item in data:
-            message = item['message'] if item.has_key('message') else ''
             share = item['shares']['count'] if item.has_key('shares') else 0
-            link = item['link'] if item.has_key('link') else ''
-            temp = {
-                'account': username,
-                'message': message,
-                'id': item['id'],
-                'public_time': item['created_time'],
-                'date': item['created_time'][:10],
-                'share': share,
-                'like': item['likes']['summary']['total_count'],
-                'comment': item['comments']['summary']['total_count'],
-                'link': link,
-            }
-            # print temp
-            result.append(temp)
+            temp = time.mktime(time.strptime(item['created_time'], "%Y-%m-%dT%H:%M:%S+0000"))
+            if temp >= week_ago:
+                share_total += int(share)
+                like_total += int(item['likes']['summary']['total_count'])
+                comment_total += int(item['comments']['summary']['total_count'])
         if len(data) == 0:
             break
         paging = jsonData['paging'] if jsonData.has_key('paging') else {}
         url = paging['next'] if paging.has_key('next') else ''
-    # print len(result)
+    result = {
+        'platform': 'facebook',
+        'date': today,
+        'comment': comment_total,
+        'like': like_total,
+        'share': share_total,
+        'dislike': 0,
+        'view': 0
+    }
     jsonResult = json.dumps(result)
     print  jsonResult
     return jsonResult
