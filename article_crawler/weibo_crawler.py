@@ -195,8 +195,8 @@ def format_time(string):
 
 def get_by_selenium():
     # 定义变量
-    username = '15850786305'  # 输入你的用户名
-    password = '11223344'  # 输入你的密码
+    username = '####'  # 输入你的用户名
+    password = '####'  # 输入你的密码
 
     # 操作函数
     LoginWeibo(username, password)  # 登陆微博
