@@ -40,8 +40,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 def get_by_api():
     url = 'https://api.weibo.com/2/statuses/user_timeline.json?page=1'
-    username = 'newmedia@vzhibo.tv'
-    password = 'lanfeng123'
+    username = '**********'
+    password = '**********'
     value = {}
     value['trim_user'] = '1'
     value['count'] = '100'
