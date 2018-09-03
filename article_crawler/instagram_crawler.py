@@ -42,45 +42,9 @@ def get_by_api():
     return jsonResult
 
 
-# def get_by_api():
-#     # user_id = '3590979919'  #insta360
-#     user_id = '3655666981'    #cielni
-#     # oauth = OAuth()
-#     access_token = '3655666981.a84f3a3.300f1e9a34fb4df4acad0b6100dcdc79'
-#     url = 'https://api.instagram.com/v1/users/' + user_id + '/media/recent/?access_token=' + access_token
-#     now = time.mktime(datetime.date.today().timetuple())
-#     week_ago = now - (3600 * 24 * 7)
-#     today = datetime.datetime.now().strftime('%Y-%m-%d')
-#     like_total = 0
-#     comment_total = 0
-#     request = urllib2.Request(url = url)
-#     response = urllib2.urlopen(request)
-#     page = response.read()
-#     print page
-#     jsonData = json.loads(page, encoding="utf-8")
-#     data = jsonData['data']
-#     for item in data:
-#         temp = int(item['created_time'])
-#         if temp >= week_ago:
-#             like_total += int(item['likes']['count'])
-#             comment_total += int(item['comments']['count'])
-#     result = {
-#         'platform': 'instagram',
-#         'date': today,
-#         'comment': comment_total,
-#         'like': like_total,
-#         'share': 0,
-#         'dislike': 0,
-#         'view': 0
-#     }
-#     jsonResult = json.dumps(result)
-#     print  jsonResult
-#     return jsonResult
-
-
 
 def OAuth():
-    url = 'https://www.instagram.com/oauth/authorize/?client_id=a84f3a3ec8c44dfbbe9d2e3f07dc9c97&redirect_uri=http://www.baidu.com&response_type=token'
+    url = 'https://www.instagram.com/oauth/authorize/?client_id=&redirect_uri=http://www.baidu.com&response_type=token'
     request = urllib2.Request(url = url)
     response = urllib2.urlopen(request)
     redirect_url = response.geturl()
