@@ -63,8 +63,8 @@ def OAuth():
     url = 'https://api.twitter.com/oauth2/token'
     value = {}
     value['grant_type'] = 'client_credentials'
-    value['client_id'] = '1VgtHGY9P0MvZCELFMVyj742V'
-    value['client_secret'] = 's70lp3naiGFUDhECxCF3oqnvNoDtShIvhEaOqJOZw8Kqkm0Ht4'
+    value['client_id'] = ''
+    value['client_secret'] = ''
     data = urllib.urlencode(value)
     request = urllib2.Request(url = url, data = data)
     response = urllib2.urlopen(request)
