@@ -10,34 +10,6 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-# def get_by_api():
-#     url = 'https://api.weibo.com/2/statuses/user_timeline.json'
-#     access_token= oauth()
-#     value = {}
-#     value['trim_user'] = '1'
-#     value['count'] = '100'
-#     value['access_token'] = access_token
-#     data = urllib.urlencode(value)
-#     results = requests.get(url=url, params=data)
-#     page = results.content
-#     print page
-#
-# def oauth():
-#     url = 'https://api.weibo.com/oauth2/access_token'
-#     value = {}
-#     value['client_id'] = '2397089507'
-#     value['redirect_uri'] = 'http://www.baidu.com'
-#     value['client_secret'] = '59a24c6051d6fdbb144a5b9e4f15b0d1'
-#     value['grant_type'] = 'authorization_code'
-#     value['code'] = '90b5cd7549e8461fdef063828eee498c'
-#     data = urllib.urlencode(value)
-#     results = requests.post(url=url, params=data)
-#     print results.content
-#     data = json.loads(results.content, encoding="utf-8")
-#     ## 需要判断返回是否正常
-#     access_token = data['access_token']
-#     return access_token
-
 def get_by_api():
     url = 'https://api.weibo.com/2/statuses/user_timeline.json?page=1'
     username = '**********'
