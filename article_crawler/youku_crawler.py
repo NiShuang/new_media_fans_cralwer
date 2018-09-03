@@ -7,7 +7,7 @@ import datetime
 
 
 def get_by_api():
-    client_id = '138c334850478e6b'
+    client_id = ''
     username = 'Insta360'
     url = 'https://openapi.youku.com/v2/videos/by_user.json?client_id=' + client_id + '&user_name=' + username + '&count=20'
     now = time.mktime(datetime.date.today().timetuple())
