@@ -10,8 +10,8 @@ class YoukuCrawler:
     def __init__(self):
         self.video_ids = []
         self.maxResults = 50
-        playlist_id = 'UU3qWcF49rv8VMZO7Vg6kj5w'
-        self.app_key = 'AIzaSyBg_mtqCgH3mhrTFPVOqDnNeN8wVVO_s5I'
+        playlist_id = ''
+        self.app_key = ''
         self.list_api = 'https://www.googleapis.com/youtube/v3/playlistItems?maxResults=' + str(self.maxResults) + '&part=snippet&playlistId=' + playlist_id + '&key=' + self.app_key
         # self.info_api = 'https://www.googleapis.com/youtube/v3/videos?maxResults=50&part=snippet,statistics' + '&key=' + self.app_key
         self.info_api = 'https://www.googleapis.com/youtube/v3/videos'
