@@ -27,7 +27,7 @@ def get_by_request():
 
 
 def get_by_api():
-    url = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UC3qWcF49rv8VMZO7Vg6kj5w&key=AIzaSyBg_mtqCgH3mhrTFPVOqDnNeN8wVVO_s5I'
+    url = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=&key='
     request = urllib2.Request(url = url)
     response = urllib2.urlopen(request)
     page = response.read()
