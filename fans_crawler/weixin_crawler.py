@@ -30,8 +30,8 @@ def get_token():
     url = 'https://api.weixin.qq.com/cgi-bin/token'
     value = {}
     value['grant_type'] = 'client_credential'
-    value['appid'] = 'wxa01ae38d52e5b020'
-    value['secret'] = 'c19d7334e7e6be29888d2ed728972318'
+    value['appid'] = ''
+    value['secret'] = ''
     data = urllib.urlencode(value)
     request = urllib2.Request(url = url, data = data)
     response = urllib2.urlopen(request)
