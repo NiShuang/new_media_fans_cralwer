@@ -5,9 +5,8 @@ import urllib
 
 
 def get_by_api():
-    # user_id = '3590979919'
-    user_id = '3655666981'
-    access_token = '3655666981.a84f3a3.300f1e9a34fb4df4acad0b6100dcdc79'
+    user_id = ''
+    access_token = ''
     url = 'https://api.instagram.com/v1/users/' + user_id + '/?access_token=' + access_token
     # oauth = OAuth()
     request = urllib2.Request(url = url)
